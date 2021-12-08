@@ -10,11 +10,13 @@ document.getElementById('generate').addEventListener('click', generateAction);
 
 /* Function called by event listener */
 function generateAction(){
+    const feelings = document.getElementById('feelings').value;
+    console.log(feelings)
     const clientZip = document.getElementById('zip').value;
     const baseUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${clientZip}&appid=${apiKey}`;
     getFromOpenWeatherMap(baseUrl)
     .then((data)=>{
-        console.log(data)
+        postDataToServer('/addData',{temperature:data.main.temp, date:newDate, userResponse:feelings})
     })
 
 }
@@ -30,4 +32,22 @@ const getFromOpenWeatherMap = async (url='') => {
         console.log("error", error.message);
     }
 }
+/* Function to POST data */
+const postDataToServer = async (url = '', data = {}) => {
 
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    try {
+        const newData = await response.json();
+        return newData;
+    } catch (error) {
+        console.log("error", error.message);
+    }
+};
