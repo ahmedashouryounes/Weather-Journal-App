@@ -10,15 +10,24 @@ document.getElementById('generate').addEventListener('click', generateAction);
 
 /* Function called by event listener */
 function generateAction(){
-    const feelings = document.getElementById('feelings').value;
-    console.log(feelings)
     const clientZip = document.getElementById('zip').value;
+    const feelings = document.getElementById('feelings').value;
+    if(!clientZip || !feelings){
+        alert('Enter A value in zip an feelings')
+        return
+    }
     const baseUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${clientZip}&appid=${apiKey}`;
     getFromOpenWeatherMap(baseUrl)
     .then((data)=>{
         postDataToServer('/addData',{temperature:data.main.temp, date:newDate, userResponse:feelings})
     })
-
+    .then(
+        getDataToServer('/getData')        
+        .then(function (serverData) {
+                updateUI(serverData);
+            })
+        )
+    
 }
 
 /* Function to GET Web API Data*/
@@ -35,19 +44,40 @@ const getFromOpenWeatherMap = async (url='') => {
 /* Function to POST data */
 const postDataToServer = async (url = '', data = {}) => {
 
-    const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-
     try {
-        const newData = await response.json();
-        return newData;
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
     } catch (error) {
         console.log("error", error.message);
     }
 };
+
+/* Function to GET Project Data */
+const getDataToServer = async (url = '') => {
+    const request = await fetch(url);
+    try {
+        // Transform into JSON
+        const allData = await request.json()
+        return allData
+    } catch (error) {
+        console.log("error", error.message);
+    }
+}
+
+/* Function to Update UI */
+const updateUI = async (finalData) => {
+    try {
+        document.getElementById('date').innerHTML = finalData.date;
+        document.getElementById('temp').innerHTML = finalData.temperature;
+        document.getElementById('content').innerHTML = finalData.userResponse;
+
+    } catch (error) {
+        console.log("error", error.message);
+    }
+}

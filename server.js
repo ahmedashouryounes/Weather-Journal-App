@@ -46,7 +46,6 @@ app.post('/addData', (req,res) => {
         date,
         userResponse
     }
-    console.log(projectData)
     res.send();
 });
 
