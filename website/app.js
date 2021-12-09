@@ -1,7 +1,7 @@
 /* Global Variables */
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+let newDate = d.getMonth()+1 + '.' + d.getDate() + '.' + d.getFullYear();
 
 // Personal API Key for OpenWeatherMap API
 const apiKey = "2bc7678332ff43cf91afd0e1686d7c21";
@@ -71,7 +71,7 @@ const getDataToServer = async (url = '') => {
 }
 
 /* Function to Update UI */
-const updateUI = async (finalData) => {
+const updateUI = (finalData) => {
     try {
         document.getElementById('date').innerHTML = finalData.date;
         document.getElementById('temp').innerHTML = finalData.temperature;
