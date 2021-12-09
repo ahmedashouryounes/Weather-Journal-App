@@ -12,5 +12,5 @@ If you are interested in testing your code as you go, you can use `tests.js` as 
 ## About me
 #### author : Ahmed Ashour
 #### age : 30
-#### skils : HTML CSS Bootstrap JavaScript Node.js Express
+#### skills : HTML CSS Bootstrap JavaScript Node.js Express
 #### Project Name : Weather-Journal App
